@@ -20,6 +20,7 @@ class Tuple:
         for element in self.values:
             if element == value:
                 count += 1
+
         return count
 
     def index(self, value) -> int:
@@ -29,10 +30,11 @@ class Tuple:
         Args:
             value: индекс искомого элемента
         """
+
         if value not in self.values:
             raise ValueError
-        index = 0
-        for item in self.values:
+
+        for index, item in enumerate(self.values):
             if item == value:
+
                 return index
-            index += 1
