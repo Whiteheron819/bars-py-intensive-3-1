@@ -3,6 +3,11 @@ class Tuple:
     Создает неизменяемый объект с упорядоченной структурой и методами count и index.
     При создании принимается последовательность объектов.
     """
+    def __init__(self, *args):
+        self.values = args
+
+    def __getitem__(self, item):
+        return self.values[item]
 
     def count(self, value) -> int:
         """
@@ -11,7 +16,11 @@ class Tuple:
         Args:
             value: количество вхождений в объекте
         """
-        raise NotImplementedError
+        count = 0
+        for element in self.values:
+            if element == value:
+                count += 1
+        return count
 
     def index(self, value) -> int:
         """
@@ -20,4 +29,10 @@ class Tuple:
         Args:
             value: индекс искомого элемента
         """
-        raise NotImplementedError
+        if value not in self.values:
+            raise ValueError
+        index = 0
+        for item in self.values:
+            if item == value:
+                return index
+            index += 1
