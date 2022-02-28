@@ -15,7 +15,7 @@ class Multiplier:
         return Multiplier(self.value * other.value)
 
     def get_value(self) -> int:
-        return self.value
+        return int(self.value)
 
 
 class Hundred(Multiplier):
