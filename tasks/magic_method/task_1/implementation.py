@@ -14,7 +14,7 @@ class Multiplier:
     def __mul__(self, other):
         return Multiplier(self.value * other.value)
 
-    def get_value(self):
+    def get_value(self) -> int:
         return self.value
 
 
