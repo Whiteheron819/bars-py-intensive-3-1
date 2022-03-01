@@ -3,10 +3,10 @@ def error_messages(path, mode):
     data = open(path, mode)
 
     while True:
-        line = data.readline()
+        line = data.readline().lower()
         if not line:
             break
-        if "ERROR" in line:
+        if "error" in line:
             yield line.strip()
 
     data.close
