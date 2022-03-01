@@ -2,7 +2,7 @@ from datetime import date
 
 from django.test import TestCase
 
-from tasks.models import Worker, Department
+from intensive.workers.models import Worker, Department
 
 
 class WorkerModelTest(TestCase):
@@ -46,7 +46,7 @@ class WorkerModelTest(TestCase):
         all_count = Worker.objects_all.all().count()
         self.assertEquals(all_count, 4)
 
-    def test_all_count_workers(self):
+    def test_all_active_count_workers(self):
         active_count = Worker.objects.all().count()
         self.assertEquals(active_count, 2)
 
