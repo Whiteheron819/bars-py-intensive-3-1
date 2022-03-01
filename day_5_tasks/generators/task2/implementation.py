@@ -1,15 +1,15 @@
 def error_messages(path, mode):
 
-    file1 = open(path, mode)
+    data = open(path, mode)
 
     while True:
-        line = file1.readline()
+        line = data.readline()
         if not line:
             break
         if "ERROR" in line:
             yield line.strip()
 
-    file1.close
+    data.close
 
 
 for message in error_messages('log.txt', 'r'):
