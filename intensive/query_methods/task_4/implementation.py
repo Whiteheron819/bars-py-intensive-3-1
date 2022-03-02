@@ -1,4 +1,5 @@
 from ..models import *
+from django.db.models import Sum
 
 
 def get_top_product_by_total_count_in_period(begin, end):
@@ -10,4 +11,12 @@ def get_top_product_by_total_count_in_period(begin, end):
 
     Returns: возвращает наименование товара и объем
     """
-    raise NotImplementedError
+    product = OrderItem.objects.filter(
+        order__date_formation__range=[begin, end]
+    ).values('product__name').annotate(amount=Sum('count')).order_by('-amount').first()
+    if product:
+        result = [(product['product__name'], int(product['amount']))]
+    else:
+        result = []
+
+    return result
