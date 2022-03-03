@@ -1,5 +1,7 @@
 from django.db import models
 
+import datetime as dt
+
 
 class WorkerManager(models.Manager):
     """
@@ -48,7 +50,7 @@ class Department(models.Model):
     Подразделение
     """
     name = models.CharField('Наименование', max_length=30)
-    education_office = models.ForeignKey(EducationOffice, on_delete=models.SET_NULL, null=True )
+    education_office = models.ForeignKey(EducationOffice, on_delete=models.SET_NULL, null=True)
     office = models.ForeignKey(GeneralOffice, on_delete=models.SET_NULL, null=True)
 
     class Meta:
@@ -68,11 +70,11 @@ class Person(models.Model):
 
 class Worker(Person):
     """
-    Сотрудник
+    Сотрудник. Если мы не вводим дату выхода на работу, то подставляется текущая дата.
     """
     objects = WorkerManager()
     objects_all = models.Manager()
-    startwork_date = models.DateField('Дата выхода на работу', null=True, )
+    startwork_date = models.DateField('Дата выхода на работу', null=True, default=dt.datetime.now())
     tab_num = models.IntegerField('Табельный номер', default=0)
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
 
