@@ -10,27 +10,33 @@ class WorkerManager(models.Manager):
         Переопределенный кверисет возвращающий всех сотрудников без директоров
         """
 
-        raise NotImplementedError
+        return super().get_queryset().filter(director__isnull=True)
 
 
-class EducationOffice(models.Model):
+class Office(models.Model):
     """
-    Учебный офис
+    Офис
     """
     address = models.TextField('Адрес')
     mail = models.CharField('Адрес почты', max_length=30,)
+    class Meta:
+        abstract = True
+
+
+class EducationOffice(Office):
+    """
+    Учебный офис
+    """
     is_active = models.BooleanField(default=True)
 
     class Meta:
         db_table = 'education_office'
 
 
-class GeneralOffice(models.Model):
+class GeneralOffice(Office):
     """
     Головной офис
     """
-    address = models.TextField('Адрес')
-    mail = models.CharField('Адрес почты', max_length=30)
     name = models.TextField('Название головного офиса ')
 
     class Meta:
@@ -42,7 +48,6 @@ class Department(models.Model):
     Подразделение
     """
     name = models.CharField('Наименование', max_length=30)
-
     education_office = models.ForeignKey(EducationOffice, on_delete=models.SET_NULL, null=True )
     office = models.ForeignKey(GeneralOffice, on_delete=models.SET_NULL, null=True)
 
@@ -54,8 +59,8 @@ class Person(models.Model):
     """
     Физическое лицо
     """
-    first_name = models.CharField('Фамилия', max_length=30)
-    last_name = models.CharField('Имя', max_length=30)
+    first_name = models.CharField('Фамилия', max_length=30, db_index=True)
+    last_name = models.CharField('Имя', max_length=30, db_index=True)
 
     class Meta:
         abstract = True
@@ -88,14 +93,18 @@ class OrderedWorker(Worker):
         """
         Получить значение года приема на работу
         """
-        raise NotImplementedError
+        return self.startwork_date.year
+
+    class Meta:
+        proxy = True
+        ordering = ['first_name', 'startwork_date']
 
 
 class Director(Worker):
     """
     Директор
     """
-    # что здесь не хватает?
+    objects = models.Manager()
     grade = models.IntegerField('Оценка', default=1)
 
     class Meta:
