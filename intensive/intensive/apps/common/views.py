@@ -118,7 +118,6 @@ class Task4View(View):
             'authors': authors,
             'voters': voters,
         }
-        print(data)
 
         return JsonResponse(dict(data=data), json_dumps_params=dict(ensure_ascii=False, default=str))
 
