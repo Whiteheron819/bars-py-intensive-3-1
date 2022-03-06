@@ -1,5 +1,6 @@
 from django.http import JsonResponse
 
+
 def calc(request):
     """
     Представление которому в параметре запроса maths через разделитель перечисляются простейшие арифметические операции
@@ -10,4 +11,14 @@ def calc(request):
 
     Результат:  JsonResponse вида {'3*3': 9, '10-2': 8, '10/5': 2}
     """
-    pass
+    response = {}
+    raw_data = request.GET
+    if 'delimiter' in raw_data:
+        delimiter = raw_data['delimiter']
+    else:
+        delimiter = ','
+    data = request.GET['maths'].split(delimiter)
+    for calculation in data:
+        response[calculation] = eval(calculation)
+
+    return JsonResponse(response)
