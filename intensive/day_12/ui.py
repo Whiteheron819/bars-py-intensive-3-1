@@ -15,20 +15,7 @@ class MasterPanel(ExtFieldSet):
         self.height = 200
         self.items.extend([
             ExtButton(
-                text='Нажми меня',
-                handler='''
-                    function(){
-                        const parent = this.ownerCt;
-                        const strField = parent.findByType('textfield')[0];
-                        sendRequest("/demo/win1", null, {"str_field": strField.getValue()});
-                    }''',
-            ),
-            ExtStringField(
-                label='Поле ввода',
-                name='str_field',
-            ),
-            ExtButton(
-                text='Grid',
+                text='Список пользователей',
                 handler='function(){ sendRequest("/demo/gridwin");}',
             ),
         ])
@@ -52,23 +39,34 @@ class MasterWindow(ExtWindow):
 
 class GridWindow(ExtWindow):
     """
-    Пример окна с гридом
+    Окно списка пользователей
     """
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.title = 'Grid'
+        self.title = 'Список пользователей'
         self.layout = 'border'
         self.grid = ExtObjectGrid(
             region='center'
         )
         self.grid.plugins.append('new Ext.ux.grid.GridHeaderFilters()')
         self.grid.add_column(
-            data_index='id',
-            header='ИД',
+            data_index='username',
+            header='username',
+            sortable=True
         )
         self.grid.add_column(
-            data_index='name',
+            data_index='first_name',
             header='Имя',
+            sortable=True
+        )
+        self.grid.add_column(
+            data_index='last_name',
+            header='Фамилия',
+            sortable=True
+        )
+        self.grid.add_column(
+            data_index='email',
+            header='email',
             sortable=True
         )
         self.items.extend([
@@ -76,27 +74,43 @@ class GridWindow(ExtWindow):
         ])
 
 
-class ItemWindow(ExtEditWindow):
+class UserItemWindow(ExtEditWindow):
     """
-    Пример окна редактирования
+    Окно создания пользователя
     """
-    def __init__(self, *args, create_new=False, **kwargs):
+    def __init__(self, *args, create_new=True, **kwargs):
         super().__init__(*args, **kwargs)
-        self.title = 'Карточка элемента'
+        self.title = 'Создать пользователя'
         self.id_field = ExtHiddenField(
             name='id',
         )
-        self.name_field = ExtStringField(
-            label='Наименование',
-            name='name',
+        self.username_field = ExtStringField(
+            label='Username',
+            name='username',
+        )
+        self.first_name_field = ExtStringField(
+            label='Имя',
+            name='first_name',
+        )
+        self.last_name_field = ExtStringField(
+            label='Фамилия',
+            name='last_name',
+        )
+        self.email_field = ExtStringField(
+            label='Email',
+            name='email',
+        )
+        self.password_field = ExtStringField(
+            label='Пароль',
+            name='password',
         )
         self.form = ExtForm()
         self.button_align = self.align_left
         self.save_button = ExtButton(
-            text=u'Сохранить',
+            text='Сохранить',
             handler='submitForm')
         self.cancel_button = ExtButton(
-            text=u'Закрыть',
+            text='Закрыть',
             handler='function(){win.close();}')
 
         self.footer_bar = ExtToolBar()
@@ -107,7 +121,11 @@ class ItemWindow(ExtEditWindow):
 
         self.form.items.extend([
             self.id_field,
-            self.name_field,
+            self.username_field,
+            self.first_name_field,
+            self.last_name_field,
+            self.email_field,
+            self.password_field,
         ])
 
         self.init_component(*args, **kwargs)

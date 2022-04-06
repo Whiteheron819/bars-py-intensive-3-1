@@ -1,5 +1,7 @@
 from dataclasses import dataclass
-from recordpack.provider import ObjectListProvider
+
+from django.contrib.auth.hashers import make_password
+from recordpack.provider import DjangoModelProvider
 
 
 @dataclass(init=False)
@@ -16,19 +18,13 @@ class GridItem:
         super().__init__()
 
 
-# Тестовый набор данных, чтобы не использовать БД
-test_data = [GridItem(i) for i in range(1, 10)]
-
-
-class TestProvider(ObjectListProvider):
+class UserProvider(DjangoModelProvider):
     """
-    Пример провайдера списковых данных
+    Провайдер для пользователей
     """
-    def _preprocess_record(self, obj, context=None):
-        return obj
 
     def save(self, obj):
-        # автогенерация ID для новых записей
-        if obj.id is None:
-            obj.id = len(test_data) + 1
+        if getattr(obj, 'password'):
+            password = make_password
+            setattr(obj, 'password', password)
         super().save(obj)
